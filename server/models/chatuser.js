@@ -15,7 +15,7 @@ const UserSchema=new mongoose.Schema({
     friendList:[{
        userId:{
          type: mongoose.Schema.Types.ObjectId,
-         ref: "users"
+         ref: "chatusers"
         }
       }   
     ],

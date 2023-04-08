@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const User = require("../../models/User")
+const User = require("../../models/chatuser")
 const ObjectId = require('mongodb').ObjectId;
 
 
@@ -8,10 +8,10 @@ router.get('/:userId', async (req, res) => {
     try {
         let userId= req.params.userId;
         await User.find({_id:ObjectId(userId)},{email:1,fName:1},{userStatus:{$ne:false}})
-        .populate("friendList.userid",["fName","email","userStatus"])
-        .populate("friendList.chatroomId",["_id"])
+        .populate("friendList.userId",["fName","email","userStatus"])
+        // .populate("friendList.chatroomId",["_id"])
         .then((findUsers)=>{
-            console.log("friendList",findUsers[0].friendList)
+            console.log("friendList",findUsers[0])
 
             if(findUsers){
                 res.json({success:true,users:findUsers[0].friendList})

@@ -37,9 +37,9 @@ const Friend = () =>{
           </TableHead>
           <TableBody>
             {users && users.map((user,index) => (
-              <TableRow key={index} onClick={()=>navigate(`chat/${user.chatroomId._id}`)}>
+              <TableRow key={index} onClick={()=>navigate(`chat/${user.userId._id}`)}>
                 <TableCell component="th" scope="row">
-                  {user.userid.fName}
+                  {user.userId.fName}
                 </TableCell>
               </TableRow>
             ))}

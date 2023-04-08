@@ -10,7 +10,7 @@ import moment from 'moment'
 export default function Chat() {
 
 
-	const { chatroomId } = useParams();
+	const { friendId } = useParams();
 	const [message, setMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [arrivalMessage, setArrivalMessage] = useState("");
@@ -38,7 +38,7 @@ export default function Chat() {
            msgDate,
            sender:userId
           }
-		await axios.post(`${API_URL}chatroom/addMessage/${chatroomId}`,payload)
+		await axios.post(`${API_URL}chatroom/addMessage/${friendId}`,payload)
 
 		socket.emit("send-msg", (payload))
 
@@ -71,9 +71,13 @@ export default function Chat() {
 
 	useEffect(() => {
 		getData();
-	}, [chatroomId]);
+	}, [friendId]);
 	const getData = async () => {
-		const response = await axios.get(`${API_URL}chatroom/getAllMessage/${chatroomId}`)
+		let data ={
+			form:userId,
+			to:friendId
+		}
+		const response = await axios.post(`${API_URL}chatroom/getMessage`,data)
 		console.log("response", response)
         if(response.data.success){
             setMessageList(response.data.chatMessages)
@@ -81,7 +85,7 @@ export default function Chat() {
 	};
 	console.log("messageList", messageList)
 
-	console.log("userid", chatroomId);
+	console.log("friendId", friendId);
 	return (
 		<div className='col-lg-12'>
 

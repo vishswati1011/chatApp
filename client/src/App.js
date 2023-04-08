@@ -27,7 +27,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
       <DrawerHeader />
         <Routes>
           <Route exact path='/' element={<Friend/>} />
-          <Route exact path='/chat/:chatroomId' element={<Chatroom/>}/>
+          <Route exact path='/chat/:friendId' element={<Chatroom/>}/>
       </Routes>
       </Box>
     </Box>
