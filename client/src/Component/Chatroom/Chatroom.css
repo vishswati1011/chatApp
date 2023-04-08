@@ -1,0 +1,150 @@
+
+  #chat-frame {
+    width: 50%;
+    min-width: 360px;
+    max-width: 1000px;
+    height: 80vh;
+    min-height: 300px;
+    max-height: 720px;
+    background: #E6EAEA;
+  
+  }
+  @media screen and (max-width: 360px) {
+    #chat-frame {
+      width: 100%;
+      height: 100vh;
+    }
+  }
+  .chat-content {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  
+  }
+  
+  
+  .chat-messages {
+    height: auto;
+    min-height: calc(100% - 93px);
+    max-height: calc(100% - 93px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+  }
+  @media screen and (max-width: 735px) {
+  .chat-messages {
+      max-height: calc(100% - 105px);
+    }
+  }
+  .chat-messages::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+  .chat-messages::-webkit-scrollbar-thumb {
+    background-color: rgba(214, 130, 130, 0.3);
+  }
+  
+  .chat-messages  li {
+    display: block;
+    clear: both;
+    float: left;
+    margin: 15px 15px 5px 15px;
+    width: calc(100% - 25px);
+    font-size: 0.9em;
+  }
+  .chat-messages  li:nth-last-child(1) {
+    margin-bottom: 20px;
+  }
+  
+  .chat-messages  li.sent p {
+    background: #435f7a;
+    color: #f5f5f5;
+  }
+  
+  .chat-messages  li.replies p {
+    background: #f5f5f5;
+    float: right;
+    display: block;
+  }
+  .chat-messages  li.replies div {
+    float: right;
+    display: block;
+    
+  }
+  
+  .chat-messages  li p {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 205px;
+    line-height: 100%;
+  }
+  @media screen and (min-width: 735px) {
+  .chat-messages  li p {
+      max-width: 300px;
+    }
+  }
+  .chat-message-input {
+    position: absolute;
+    bottom: 0;
+    width: 30%;
+    z-index: 99;
+  }
+  .wrap {
+    position: relative;
+  }
+  .wrap input {
+    float: left;
+    border: none;
+    width: calc(100% - 50PX);
+    padding: 11px 32px 10px 8px;
+    font-size: 0.8em;
+    color: #32465a;
+    height:100%;
+    height: 48px;
+  }
+  @media screen and (max-width: 735px) {
+  .wrap input {
+      padding: 15px 32px 16px 8px;
+    }
+  }
+  .wrap input:focus {
+    outline: none;
+  }
+  
+  .send-button {
+    float: right;
+    border: none;
+    width: 50px;
+    padding: 12px 0;
+    cursor: pointer;
+    background: #32465a;
+    color: #f5f5f5;
+  }
+  @media screen and (max-width: 735px) {
+  .send-button {
+      padding: 16px 0;
+    }
+  }
+  .send-button:hover {
+    background: #435f7a;
+  }
+  .send-button:focus {
+    outline: none;
+  }
+  
+  .contact-profile {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background: #f5f5f5;
+    padding: 0 20px;
+   
+  }
+  
+  .contact-profile p {
+    font-size:1rem;
+    font-weight:bold;
+    margin-left: 20PX;
+   
+  }
