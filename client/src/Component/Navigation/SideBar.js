@@ -138,7 +138,8 @@ const Home = props => {
         <Divider />
         <List>
         <List>
-        <NavLink to='/chat'>
+     
+            <NavLink to='/chatscreen'>
         <ListItem button key={"Employee"}>
               <ListItemIcon>
                 <MailIcon />
@@ -146,7 +147,6 @@ const Home = props => {
               <ListItemText primary={"Employee"} />
             </ListItem>
             </NavLink>
-         
         </List>
         </List>
       </Drawer>

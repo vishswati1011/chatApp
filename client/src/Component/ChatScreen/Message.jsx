@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { API_URL, SOCKET_URL } from '../Services/url';
-import './Chatroom.css'
+import '../Chatroom/Chatroom.css'
 import io from "socket.io-client";
 import axios from 'axios';
 import { useParams } from 'react-router';
 import moment from 'moment'
 
-export default function Chat() {
+export default function Chat({friendId}) {
 
 
-	const { friendId } = useParams();
+	
 	const [message, setMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [arrivalMessage, setArrivalMessage] = useState("");
@@ -36,12 +36,18 @@ export default function Chat() {
            type:"text",
            msgTime,
            msgDate,
-           sender:userId
+           sender:userId,
+           users:[userId,friendId]
           }
-		await axios.post(`${API_URL}chatroom/addMessage/${friendId}`,payload)
+		await axios.post(`${API_URL}chatroom/addMsg`,payload)
+     
+		// socket.emit("send-msg", (payload))
 
-		socket.emit("send-msg", (payload))
-
+		socket.emit("send-msg", {
+			from:userId ,
+			to: friendId,
+			message: payload
+		})
 		const msgs = [...messageList];
 		msgs.push(payload);
 		setMessageList(msgs);
@@ -53,7 +59,7 @@ export default function Chat() {
 		if (socket) {
 			socket.on("msg-recieve", (msg) => {
 				console.log("receive msg", msg)
-				setArrivalMessage({ fromSelf: false, message: msg });
+				setArrivalMessage(msg);
 			});
 		}
 	}, [socket])
@@ -84,9 +90,9 @@ export default function Chat() {
 
         }
 	};
-	// console.log("messageList", messageList)
+	console.log("messageList", messageList)
 
-	// console.log("friendId", friendId);
+	console.log("friendId", friendId);
 	const onEnter =(e)=>{
 		console.log(e.keyCode,"keycode")
 		if(e.keyCode===13){
@@ -157,9 +163,8 @@ export default function Chat() {
 							id='msg'
 							onChange={handleChange}
 							value={message}
-							placeholder="Write your message..."
 							onKeyDown={onEnter}
-							 />
+							placeholder="Write your message..." />
 						<button
 							className="send-button"
 							type='button'

@@ -6,8 +6,8 @@ var addMsg = require('./addMsg')
 var getMessage = require('./getMessages')
 router.use('/addMessage',addMessage);
 router.use('/getAllMessage',getAllMessage);
-router.use('addMsg',addMsg)
-router.use("getMessage",getMessage)
+router.use('/addMsg',addMsg)
+router.use("/getMessage",getMessage)
 
 
 module.exports = router;

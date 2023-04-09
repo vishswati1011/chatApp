@@ -96,12 +96,12 @@
   .wrap input {
     float: left;
     border: none;
-    width: calc(100% - 50PX);
+    /* width: calc(100% - 50PX); */
     padding: 11px 32px 10px 8px;
     font-size: 0.8em;
     color: #32465a;
     height:100%;
-    height: 48px;
+    width: 80%;
   }
   @media screen and (max-width: 735px) {
   .wrap input {
@@ -116,7 +116,7 @@
     float: right;
     border: none;
     width: 50px;
-    padding: 12px 0;
+    padding: 5px 0;
     cursor: pointer;
     background: #32465a;
     color: #f5f5f5;
