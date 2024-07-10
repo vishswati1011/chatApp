@@ -1,0 +1,11 @@
+.user_list{
+    width:30%;
+}
+.chat_box{
+    width:65%;
+}
+.chatscreen{
+    display:flex;
+    flex-wrap: wrap;
+    gap:20px
+}

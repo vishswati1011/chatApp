@@ -1,0 +1,13 @@
+.list {
+    display: flex;
+    align-items: center;
+  }
+  
+  .username {
+    /* Your existing styles */
+  }
+  
+  .icon {
+    margin-left: auto;
+    /* Your existing styles */
+  }

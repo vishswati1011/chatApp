@@ -94,9 +94,7 @@ export default function Chat() {
 		}
 	}
 	return (
-		<div className='col-lg-12'>
-
-
+	
 			<div className="main-chat-div col-lg-9">
 				<div id="chat-frame">
 					<div className="chat-content">
@@ -171,7 +169,7 @@ export default function Chat() {
 					</div>
 				</div>
 			</div>
-		</div>
+	
 	)
 
 }

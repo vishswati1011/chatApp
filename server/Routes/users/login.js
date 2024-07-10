@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../../models/chatuser')
+const User = require('../../models/User')
 const jwt = require("jsonwebtoken");
 const ObjectId = require('mongodb').ObjectId;
 // const sendMail = require('../config/sendMail');
@@ -10,7 +10,6 @@ const bcryptjs = require('bcryptjs');
 router.post('/', async (req, res) => {
     try{
 		const {email,password}=req.body;
-		console.log("user",req.body)
 		const user = await User.findOne({email})
 		if(!user){
 			res.json({
@@ -20,15 +19,13 @@ router.post('/', async (req, res) => {
 		}
 		if(user)
 		{
-			console.log("pass",user)
-			if((await bcryptjs.compare(password, user.pwd)))
+			if((await bcryptjs.compare(password, user.password)))
 			{
-				const {_id,fName,lName,phone}=user;
+				const {_id,username,email,phone}=user;
 				const payload = {
 					_id,
 					email,
-					fName,
-					lName,
+					username,
 					phone
 				}
 				jwt.sign(

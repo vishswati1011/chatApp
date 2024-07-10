@@ -1,18 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const User = require("../../models/chatuser")
+const User = require("../../models/User")
 const ObjectId = require('mongodb').ObjectId;
 
 
 router.get('/:userId', async (req, res) => {
     try {
         let userId= req.params.userId;
-        await User.find({_id:ObjectId(userId)},{email:1,fName:1},{userStatus:{$ne:false}})
-        .populate("friendList.userId",["fName","email","userStatus"])
-        // .populate("friendList.chatroomId",["_id"])
+        await User.find({_id:ObjectId(userId)},{email:1,username:1},{userStatus:{$ne:false}})
+        .populate("friendList.userId",["username","email","userStatus"])
+        .populate("friendList.chatroomId",["_id"])
         .then((findUsers)=>{
-            console.log("friendList",findUsers[0])
-
             if(findUsers){
                 res.json({success:true,users:findUsers[0].friendList})
             }else{

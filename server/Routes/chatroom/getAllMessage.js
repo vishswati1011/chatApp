@@ -19,4 +19,19 @@ router.get('/:chatroomId', async (req, res) => {
         console.log("error", err)
     }
 })
+
+//not in use
+// router.get('/all/:userId', async (req, res) => {
+//     let userId = req.params.userId
+//     try {
+//         const users = await Chatroom.find({ users: { $elemMatch: { $eq: userId } } })
+//         if(users){
+//             res.json({data :users,success:true});
+//         }else{
+//             res.json({message:"failed to fetch chat users.",success:false})
+//         }
+//     } catch (err) {
+//         console.log("error", err)
+//     }
+// })
 module.exports= router;

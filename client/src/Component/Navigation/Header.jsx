@@ -160,7 +160,7 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} style={{backgroundColor:"#205ba7",color:'#ffffff'}} >
         <Toolbar>
           <Typography
             variant="h6"
@@ -170,9 +170,9 @@ export default function PrimarySearchAppBar() {
           >
             Chat Application
           </Typography>
-          <Search>
+          <Search style={{backgroundColor:'white'}}>
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon  style={{color:'#000'}}/>
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"

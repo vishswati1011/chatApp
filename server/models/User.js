@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 
 const UserSchema=new mongoose.Schema({
-    fName:{type:String},
-    lName:{type:String},
+    username:{type:String},
     email:{type:String},
     otp:{type:Number},
     phone:{
@@ -11,10 +10,10 @@ const UserSchema=new mongoose.Schema({
           validator: Number.isInteger,
           message: '{VALUE} must be an integer',
         },},
-    pwd:{type:String},
+    password:{type:String},
     friendList:[
        { 
-        userid : {
+        userId : {
          type: mongoose.Schema.Types.ObjectId,
          ref: "users"
         },

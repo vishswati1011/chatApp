@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { NavLink ,Link} from 'react-router-dom';
-
+import { NavLink } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-
+import MailIcon from '@mui/icons-material/Mail';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -15,14 +14,15 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
 import Header from './Header';
 
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
+  backgroundColor:'#205ba7',
+  color:'#ffffff',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -36,6 +36,8 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
+  backgroundColor:'#205ba7',
+  color:'#ffffff',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(9)} + 1px)`,
@@ -101,7 +103,7 @@ const Home = props => {
     };
     return (
     <div>
-       <AppBar position="fixed" open={open}>
+       <AppBar position="fixed" open={open} style={{backgroundColor:"#205ba7"}}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -113,12 +115,12 @@ const Home = props => {
               ...(open && { display: 'none' }),
             }}
           >
-            <MenuIcon />
+            <MenuIcon style={{color:'#ffffff'}}/>
           </IconButton>
           <Header/>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent" open={open} >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -126,28 +128,22 @@ const Home = props => {
         </DrawerHeader>
         <Divider />
         <List>
-          <NavLink to='/'>
+          <NavLink to='/' style={{color:'#ffffff',listStyle:'none',textDecoration:'none',fontWeight:'bold'}}>
             <ListItem button key={"Mail"}>
               <ListItemIcon>
-                <InboxIcon />
+                <MailIcon style={{color:'#ffffff'}}/>
               </ListItemIcon>
               <ListItemText primary={"Mail"} />
             </ListItem>
             </NavLink>
-        </List>
-        <Divider />
-        <List>
-        <List>
-     
-            <NavLink to='/chatscreen'>
+        <NavLink to='/allUsers' style={{color:'#ffffff',listStyle:'none',textDecoration:'none',fontWeight:'bold'}}>
         <ListItem button key={"Employee"}>
               <ListItemIcon>
-                <MailIcon />
+                <ContactMailIcon style={{color:'#ffffff'}}/>
               </ListItemIcon>
               <ListItemText primary={"Employee"} />
             </ListItem>
             </NavLink>
-        </List>
         </List>
       </Drawer>
     </div>

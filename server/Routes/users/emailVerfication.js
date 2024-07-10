@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const User = require("../../models/chatuser")
+const User = require("../../models/User")
 const jwt = require("jsonwebtoken");
 const ObjectId = require('mongodb').ObjectId;
 // const sendMail = require('../config/sendMail');

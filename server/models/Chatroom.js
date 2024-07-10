@@ -14,6 +14,8 @@ const chatRoomSchema=new mongoose.Schema(
                 msgDate:""
             }
         ],
+        isGroup: {type: Boolean, default: false},
+        name: {type: String, default: null},
         users: []   // array id 2 users id in string if one to one or array of multiple user id if group chat
     })
 

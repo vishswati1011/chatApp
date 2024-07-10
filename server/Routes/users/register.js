@@ -1,49 +1,43 @@
 const express = require('express')
 const router = express.Router()
-const User = require("../../models/chatuser")
+const User = require("../../models/User")
 const jwt = require("jsonwebtoken");
 const ObjectId = require('mongodb').ObjectId;
-// const sendMail = require('../config/sendMail');
 const key = require('../../config/Key');
 const bcryptjs = require('bcryptjs');
 
 router.post('/', async (req, res) => {
     try {
 
-        const {email,fName,lName,pwd,phone,otp}=req.body;
-        console.log(req.body);
+        const {email,username,password,phone}=req.body;
+		
         const checkUser =await User.findOne({email:email})
-        console.log("checkUser",checkUser);
-        const hash = await bcryptjs.hash(pwd, 12);
         if(checkUser)
         {
-			if(otp===checkUser.otp){
-            console.log("hash",hash);
-            const user ={
+		
+			res.status(400).json({
+                success: false,
+				message: 'Error in register user',
+            });
+		}else{	
+			const hash = await bcryptjs.hash(password, 12);
+			
+        	const user = new User({
                 email,
-                fName,
-                lName,
-                pwd:hash,
-                phone,
+                username,
+                password:hash,
+                phone:Number(phone),
 				userStatus:true,
-            }
+            })
           
-			User.updateOne({_id: ObjectId(checkUser._id)},{$set:user}).then((friendAdd)=>{
-				console.log("friendAdd",friendAdd)
+			user.save().then((saved)=>{
 			const payload = {
-					userid:checkUser._id,
-					fName,
-					lName,
+					userid:saved._id,
+					username,
 					phone,
 					email
 				};
-				// const helper = async () => {
-				// 	savedUser.otp = '';
-				// 	await savedUser.save();
-				// };
-				// setTimeout(() => {
-				// 	helper();
-				// }, 900000);
+			
 				jwt.sign(
 					payload,
 					key.secretKey,
@@ -54,23 +48,14 @@ router.post('/', async (req, res) => {
 						res.status(200).json({
 							result:payload,
 							success: true,
+							token,
 							message: 'user registered successfully',
 						});
 					}
 				);
 			})
 			
-			}else{
-				res.status(400).json({
-					success: false,
-					message: 'Invalid Otp',
-				});
-			}	
-        }else{
-            res.status(400).json({
-                success: false,
-				message: 'Error in register user',
-            });
+			
         }
     }catch(err)
     {

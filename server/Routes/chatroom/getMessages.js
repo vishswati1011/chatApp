@@ -6,7 +6,6 @@ const Message = require("../../models/messages")
 router.post('/', async (req, res) => {
     try{
         const {from, to} =req.body;
-        console.log(from,"from",to)
         const message= await Message.find({ users: { $all: [ from,to ] } })
         .sort({updatedAt:1});
         res.json({

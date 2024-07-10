@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Users from './Users';
+import Friend from './Friend';
 import Chatroom from './Message'
-
-const ChatScrenn = () => {
+import './Chatscreen.css'
+const ChatScreen = () => {
 
     const [friend,setFriend]=useState("")
     const [show,setShow]= useState(false);
@@ -16,23 +16,22 @@ const ChatScrenn = () => {
     }
 
     return (
-        <>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm">
-                    <Users handleFriendId={handleFriendId} />
+
+    
+                <div class="chatscreen">
+                    <div class="user_list">
+                    <Friend handleFriendId={handleFriendId} />
                     </div>
 
-                 <div class="col-sm">
+                 <div class="chat_box">
                  {show? <Chatroom handleClose={handleClose}
                       friendId={friend} />:null}
                     </div>
 
                 </div>
-            </div>
-        </>
+           
     )
 }
-export default ChatScrenn;
+export default ChatScreen;
 
 

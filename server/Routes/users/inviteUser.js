@@ -7,22 +7,33 @@ const {
     randomHexColorEndWith,
 } = require('random-hex-color-generator')
 
-const updateUserAndchatRoom = (friendId,userId,callback) =>{
+const updateUserAndchatRoom = (friendId,userId,groupName,callback) =>{
     var data = {
-        users:[String(friendId),userId]
+        users:[String(friendId),userId],
+        isGroup:false,
+        name:groupName
     }
     Chatroom.insertMany(data,(err, chatroom) => {
         if (err) {
             callback({status:false,message:"error in update"})     
         }else{
-            let friendList={
-                userid:friendId,
+            User.updateOne({_id: ObjectId(userId)},{$push:{"friendList":{
+                userId:friendId,
                 chatroomId:chatroom[0]._id
-            }
-            User.updateOne({_id: ObjectId(userId)},{$push:{"friendList":friendList}}).then((friendAdd)=>{
+            }}}).then((friendAdd)=>{
                 if(friendAdd){
+                    User.updateOne({_id: friendId},{$push:{"friendList":{
+                        userId:userId,
+                        chatroomId:chatroom[0]._id
+                    }}})
+                    .then((updated)=>{
+                        if(updated){
+                    
                     callback({status:true,chatroomId:chatroom[0]._id})
                     }
+                })
+                        
+                }
             }).catch((error)=>{
                 callback({status:false,message:"error in update"})     
             })
@@ -31,14 +42,14 @@ const updateUserAndchatRoom = (friendId,userId,callback) =>{
 }  
 router.post('/:userId', async (req, res) => {
 
-    const {email} = req.body;
+    const {email,name} = req.body;
     const userId = req.params.userId;
     const user = await User.findOne({email})
     let friendId=""
 		if(user){
                 //if user exist in db then create room with user 
                 friendId=user._id   
-                updateUserAndchatRoom(friendId,userId,async function(response){
+                updateUserAndchatRoom(friendId,userId,name,async function(response){
                     res.json({success:true,message:'Invite user'});  
                 })  
 		}else{
@@ -47,16 +58,13 @@ router.post('/:userId', async (req, res) => {
                 email:email,
                 userStatus:false,
                 userColor:userColor,
-                fName:email
+                username:email
             }
 
            User.insertMany(user,async(err, usersaved) => {
             if (!err) {
-                console.log("usersaved",usersaved[0])
                 friendId=usersaved[0]._id  
                 updateUserAndchatRoom(friendId,userId,async function(response){
-                    console.log(response,"---------------response")
-
                     let friendList={
                         userid:userId,
                         chatroomId:response.chatroomId
