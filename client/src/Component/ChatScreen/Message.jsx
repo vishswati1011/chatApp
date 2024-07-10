@@ -4,24 +4,30 @@ import "../Chatroom/Chatroom.css";
 import io from "socket.io-client";
 import axios from "axios";
 import moment from "moment";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
+
 export default function Chat({ friendId }) {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState("");
   const userId = localStorage.getItem("chatAppuserid");
 
-  const scrollRef = useRef();
-  var socket = io(SOCKET_URL);
+  const socket = useRef(); // Reference for socket
 
   const handleChange = (event) => {
     setMessage(event.target.value);
   };
+
   useEffect(() => {
+    socket.current = io(SOCKET_URL);
     if (localStorage.getItem("chatAppuserid")) {
-      socket.emit("add-user", localStorage.getItem("chatAppuserid"));
+      socket.current.emit("add-user", localStorage.getItem("chatAppuserid"));
     }
+    return () => {
+      socket.current.disconnect();
+    };
   }, []);
+
   const handleNewUserMessage = async () => {
     let date = moment(new Date()).format();
     let msgTime = moment(new Date()).format("h:mm:ss a");
@@ -36,36 +42,28 @@ export default function Chat({ friendId }) {
     };
     await axios.post(`${API_URL}chatroom/addMsg`, payload);
 
-    // socket.emit("send-msg", (payload))
-
-    socket.emit("send-msg", {
+    socket.current.emit("send-msg", {
       from: userId,
       to: friendId,
       message: payload,
     });
-    const msgs = [...messageList];
-    msgs.push(payload);
-    setMessageList(msgs);
-    console.log("msgs", msgs, message);
+    setMessageList((prev) => [...prev, payload]);
     setMessage("");
   };
+
   useEffect(() => {
-    if (socket) {
-      socket.on("msg-recieve", (msg) => {
-        console.log("receive msg", msg);
+    if (socket.current) {
+      socket.current.on("msg-recieve", (msg) => {
         setArrivalMessage(msg);
       });
     }
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
-    arrivalMessage && setMessageList((prev) => [...prev, arrivalMessage]);
-    console.log("arrivalMessage");
+    if (arrivalMessage) {
+      setMessageList((prev) => [...prev, arrivalMessage]);
+    }
   }, [arrivalMessage]);
-
-  useEffect(() => {
-    window.HTMLElement.prototype.scrollIntoView = messageList;
-  }, [messageList]);
 
   useEffect(() => {
     getData();
@@ -76,82 +74,76 @@ export default function Chat({ friendId }) {
       to: friendId,
     };
     const response = await axios.post(`${API_URL}chatroom/getMessage`, data);
-    console.log("response", response.data.result);
     if (response.data.success) {
       setMessageList(response.data.result);
     }
   };
+
   const onEnter = (e) => {
-    console.log(e.keyCode, "keycode");
     if (e.keyCode === 13) {
       handleNewUserMessage();
     }
   };
+
   return (
     <div className="main-chat-div">
       <div id="chat-frame">
-          <div className="contact-profile">
-            <p>Chat</p>
+        <div className="contact-profile">
+          <p>Chat</p>
         </div>
         <div className="chat-messages">
-          <div>
-            <div id="msg_history">
-              {messageList &&
-                messageList.map((item, id) => {
-                  if (item.sender === userId) {
-                    //user
-                    return (
-                      <li className="replies" key={id}>
-                        {console.log(item, "item")}
-                        <div
-                          style={{ fontWeight: "bold", letterSpacing: "0.8px" }}
-                        >
-                          {item.name}
-                        </div>
-                        <br />
-                        <p>{item.content}</p>
-                      </li>
-                    );
-                  } else if (item.name === "server") {
-                    //sender means friend msg show here
-                    return (
-                      <div align="center" className="text-muted" key={id}>
-                        {item.content}
+          <div id="msg_history">
+            {messageList &&
+              messageList.map((item, id) => {
+                const isFirstMessage = id === messageList.length - 2;
+                if (item.sender === userId) {
+                  // User message
+                  return (
+                    <li className="replies" key={id}>
+                      <div
+                        style={{ fontWeight: "bold", letterSpacing: "0.8px" }}
+                      >
+                        {item.name}
                       </div>
-                    );
-                  } else {
-                    return (
-                      <li className="sent">
-                      
-                            {/* <div>{item.username}</div> */}
-                            <p>{item.content}</p>
-                       </li>
-                    );
-                  }
-                })}
-            </div>
+                      <br />
+                      <p>{item.content}</p>
+                    </li>
+                  );
+                } else if (item.name === "server") {
+                  // Server message
+                  return (
+                    <div align="center" className="text-muted" key={id}>
+                      {item.content}
+                    </div>
+                  );
+                } else {
+                  // Friend's message
+                  return (
+                    <li className="sent" key={id}>
+                      <p>{item.content}</p>
+                    </li>
+                  );
+                }
+              })}
           </div>
         </div>
       </div>
       <div className="chat-message-input" style={{ marginTop: "20px" }}>
-   
-          <input
-            type="text"
-            id="msg"
-            onChange={handleChange}
-            value={message}
-            onKeyDown={onEnter}
-            placeholder="Write your message..."
-          />
-          <button
-            className="send-button"
-            type="button"
-            // disabled={this.state.message.length === 0}
-            onClick={handleNewUserMessage}
-          >
-			<SendIcon/>
-          </button> 
-       
+        <input
+          type="text"
+          id="msg"
+          onChange={handleChange}
+          value={message}
+          onKeyDown={onEnter}
+          placeholder="Write your message..."
+        />
+        <button
+          className="send-button"
+          type="button"
+          onClick={handleNewUserMessage}
+        >
+          <SendIcon />
+        </button>
       </div>
     </div>
   );
